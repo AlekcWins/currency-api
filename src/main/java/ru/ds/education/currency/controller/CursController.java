@@ -77,7 +77,6 @@ public class CursController {
             summary = "Обновление курса"
     )
     @PutMapping
-    //Todo is need this path varible id
     public CursDto update(@RequestBody CursDto curs) {
         return cursService.update(curs);
 

@@ -10,18 +10,6 @@ import org.springframework.context.annotation.Configuration;
 
 @Configuration
 public class ApplicationConfiguration {
-//TODO remove or replace
-//
-//    public ApiInfo apiInfo(){
-//        return  new ApiInfoBuilder()
-//                .title("Currency api")
-//                .description("Сервис currency api")
-//                .license("License")
-//                .licenseUrl("http://unlicense.org")
-//                .termsOfServiceUrl("")
-//                .version(getClass().getPackage().getImplementationVersion())
-//                .build();
-//    }
 
     @Bean
     public OpenAPI customOpenAPI() {
