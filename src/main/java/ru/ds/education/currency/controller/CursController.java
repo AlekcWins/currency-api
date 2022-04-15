@@ -56,13 +56,9 @@ public class CursController {
     @GetMapping
     public List<CursDto> getAll(@RequestParam(required = false) @DateTimeFormat(pattern = "dd.MM.yyyy") LocalDate date,
                                 @RequestParam(required = false) CurrencyType currency) {
-        if (date != null && currency != null)
-            return cursService.findAllByCurrencyTypeAndDate(currency, date);
-        else if (currency != null)
-            return cursService.findAllByCurrencyType(currency);
-        else if (date != null)
-            return cursService.findAllByDate(date);
-        return cursService.getAll();
+
+        return cursService.findAllByCurrencyTypeAndDate(currency, date);
+
     }
 
     @Operation(
