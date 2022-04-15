@@ -20,7 +20,7 @@ public class CursDto {
     private CurrencyType currencyType;
 
     @Schema(description = "Значение курса", example = "1.5")
-    private BigDecimal curs;
+    private BigDecimal cursValue;
 
     @JsonFormat(pattern = "dd.MM.yyyy")
     @Schema(pattern = "dd.MM.yyyy", description = "дата", example = "14.04.2022")

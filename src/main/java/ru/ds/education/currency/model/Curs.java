@@ -1,16 +1,15 @@
 package ru.ds.education.currency.model;
 
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
 import java.time.LocalDate;
-import java.util.Date;
 
 @Entity
 @Table(name = "curs_data")
-@Data
+@Getter
+@Setter
 @NoArgsConstructor
 public class Curs {
     @Id
@@ -22,7 +21,7 @@ public class Curs {
     private CurrencyType currencyType;
 
     @Column(name = "curs")
-    private BigDecimal curs;
+    private BigDecimal cursValue;
 
     @Column(name = "curs_date")
     private LocalDate date;
