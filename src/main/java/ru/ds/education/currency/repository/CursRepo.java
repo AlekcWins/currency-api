@@ -15,7 +15,8 @@ public interface CursRepo extends JpaRepository<Curs, Long> {
 
     List<Curs> findAllByDate(LocalDate date);
 
-    @Query(value = "SELECT c FROM  #{#entityName} c WHERE (:currency is null or c.currencyType = :currency) and (cast(:date as date) is null or c.date = :date)")
+    @Query(value = "SELECT c FROM  #{#entityName} c WHERE (:currency is null or c.currencyType = :currency) and" +
+            "(cast(:date as date) is null or c.date = :date)")
     List<Curs> findAllByCurrencyTypeAndDate(@Param("currency") CurrencyType currency,
                                             @Param("date")  LocalDate date);
 
