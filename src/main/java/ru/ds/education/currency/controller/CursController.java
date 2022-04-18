@@ -20,11 +20,14 @@ import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
+import static ru.ds.education.currency.controller.CursController.ROUTE_PATH;
+
 @RestController
-@RequestMapping("api/curs")
+@RequestMapping(value = ROUTE_PATH)
 @Slf4j
 public class CursController {
 
+    public static final String ROUTE_PATH = "api/curs";
     private final CursService cursService;
 
     @Autowired
