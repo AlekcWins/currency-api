@@ -2,6 +2,8 @@ package ru.ds.education.currency.core.dto;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import io.swagger.v3.oas.annotations.media.Schema;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import ru.ds.education.currency.model.CurrencyType;
@@ -11,6 +13,8 @@ import java.time.LocalDate;
 
 @Data
 @NoArgsConstructor
+@AllArgsConstructor
+@Builder
 public class CursDto {
 
     @Schema(description = "Id курса", example = "1")
