@@ -33,8 +33,7 @@ import java.util.NoSuchElementException;
 import java.util.stream.Collectors;
 
 import static org.hamcrest.Matchers.hasSize;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -70,30 +69,27 @@ class CursControllerTest extends BasePostgresSQLContainer {
     }
 
     @Test
-    void get() throws Exception {
-        long count = cursRepo.count();
+    void getWithIdAndOkStatus() throws Exception {
         Curs curs = cursRepo.findAll().get(0);
         CursDto cursDto = cursMapper.map(curs, CursDto.class);
-        mvc.perform(
-                        org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get(
-                                getUrl()
-                        )
-                )
-                .andDo(print())
-                .andExpect(status().isOk());
 
 
         mvc.perform(
-                        org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get(
-                                getUrl(String.valueOf(cursDto.getId())))
+                        get(getUrl(String.valueOf(cursDto.getId())))
                 )
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(cursWithId("$", cursDto));
 
+    }
+
+    @Test
+    void getWithIdAndBadStatus() throws Exception {
+        long count = cursRepo.count();
+
+
         mvc.perform(
-                        org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get(
-                                getUrl(String.valueOf(++count)))
+                        get(getUrl(String.valueOf(++count)))
                 )
                 .andDo(print())
                 .andExpect(status().isBadRequest());
@@ -105,9 +101,9 @@ class CursControllerTest extends BasePostgresSQLContainer {
         long count = cursRepo.count();
         List<CursDto> cursEntities = cursRepo.findAll().stream()
                 .map(x -> cursMapper.map(x, CursDto.class)).collect(Collectors.toList());
-        mvc.perform(
-                        org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get(getUrl())
-                                .contentType(MediaType.APPLICATION_JSON))
+
+
+        mvc.perform(get(getUrl()).contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$", hasSize((int) count)))
                 .andExpect(cursWithId("$[0]", cursEntities.get(0)))
@@ -120,7 +116,67 @@ class CursControllerTest extends BasePostgresSQLContainer {
                 .andExpect(cursWithOutId("$[2]", testData.get(2)))
                 .andExpect(cursWithOutId("$[3]", testData.get(3)));
 
+    }
 
+    @Test
+    void getAllWithDateParameter() throws Exception {
+        List<CursDto> testData = loadTestData();
+        LocalDate testDate = LocalDate.of(2022, 5, 14);
+        List<CursDto> cursTestDataFilteredDateAndCurrency = testData.stream()
+                .filter(x -> x.getDate().equals(testDate))
+                .collect(Collectors.toList());
+        List<CursDto> cursEntitiesFilteredDateAndCurrency = cursRepo.findAll().stream()
+                .filter(x -> x.getDate().equals(testDate))
+                .map(x -> cursMapper.map(x, CursDto.class))
+                .collect(Collectors.toList());
+
+
+        mvc.perform(
+                        get(getUrl())
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .param("date", testDate.format(DateTimeFormatter.ofPattern(DateSpec.DATE_FORMAT)))
+                )
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$", hasSize(cursTestDataFilteredDateAndCurrency.size())))
+                .andExpect(cursWithId("$[0]", cursEntitiesFilteredDateAndCurrency.get(0)))
+                .andExpect(cursWithId("$[1]", cursEntitiesFilteredDateAndCurrency.get(1)))
+                .andExpect(cursWithOutId("$[0]", cursTestDataFilteredDateAndCurrency.get(0)))
+                .andExpect(cursWithOutId("$[1]", cursTestDataFilteredDateAndCurrency.get(1)));
+
+
+    }
+
+    @Test
+    void getAllWithCurrencyParameter() throws Exception {
+        List<CursDto> testData = loadTestData();
+        CurrencyType testCurrency = CurrencyType.USD;
+        List<CursDto> cursTestDataFilteredDateAndCurrency = testData.stream()
+                .filter(x -> x.getCurrencyType().equals(testCurrency))
+                .collect(Collectors.toList());
+        List<CursDto> cursEntitiesFilteredDateAndCurrency = cursRepo.findAll().stream()
+                .filter(x -> x.getCurrencyType().equals(testCurrency))
+                .map(x -> cursMapper.map(x, CursDto.class))
+                .collect(Collectors.toList());
+
+
+        mvc.perform(
+                        get(getUrl())
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .param("currency", testCurrency.toString())
+                )
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$", hasSize(cursTestDataFilteredDateAndCurrency.size())))
+                .andExpect(cursWithId("$[0]", cursEntitiesFilteredDateAndCurrency.get(0)))
+                .andExpect(cursWithId("$[1]", cursEntitiesFilteredDateAndCurrency.get(1)))
+                .andExpect(cursWithOutId("$[0]", cursTestDataFilteredDateAndCurrency.get(0)))
+                .andExpect(cursWithOutId("$[1]", cursTestDataFilteredDateAndCurrency.get(1)));
+    }
+
+    @Test
+    void getAllWithDateAndCurrencyParameters() throws Exception {
+        List<CursDto> testData = loadTestData();
+        List<CursDto> cursEntities = cursRepo.findAll().stream()
+                .map(x -> cursMapper.map(x, CursDto.class)).collect(Collectors.toList());
         LocalDate testDate = LocalDate.of(2022, 5, 14);
         CurrencyType testCurrency = CurrencyType.USD;
         List<CursDto> cursTestDataFilteredDateAndCurrency = testData.stream()
@@ -131,8 +187,10 @@ class CursControllerTest extends BasePostgresSQLContainer {
                 .filter(x -> x.getDate().equals(testDate))
                 .filter(x -> x.getCurrencyType().equals(testCurrency))
                 .collect(Collectors.toList());
+
+
         mvc.perform(
-                        org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get(getUrl())
+                        get(getUrl())
                                 .contentType(MediaType.APPLICATION_JSON)
                                 .param("date", testDate.format(DateTimeFormatter.ofPattern(DateSpec.DATE_FORMAT)))
                                 .param("currency", testCurrency.toString())
@@ -141,43 +199,6 @@ class CursControllerTest extends BasePostgresSQLContainer {
                 .andExpect(jsonPath("$", hasSize(cursTestDataFilteredDateAndCurrency.size())))
                 .andExpect(cursWithId("$[0]", cursEntitiesFilteredDateAndCurrency.get(0)))
                 .andExpect(cursWithOutId("$[0]", cursTestDataFilteredDateAndCurrency.get(0)));
-
-        cursTestDataFilteredDateAndCurrency = testData.stream()
-                .filter(x -> x.getDate().equals(testDate))
-                .collect(Collectors.toList());
-        cursEntitiesFilteredDateAndCurrency = cursEntities.stream()
-                .filter(x -> x.getDate().equals(testDate))
-                .collect(Collectors.toList());
-        mvc.perform(
-                        org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get(getUrl())
-                                .contentType(MediaType.APPLICATION_JSON)
-                                .param("date", testDate.format(DateTimeFormatter.ofPattern(DateSpec.DATE_FORMAT)))
-                )
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$", hasSize(cursTestDataFilteredDateAndCurrency.size())))
-                .andExpect(cursWithId("$[0]", cursEntitiesFilteredDateAndCurrency.get(0)))
-                .andExpect(cursWithId("$[1]", cursEntitiesFilteredDateAndCurrency.get(1)))
-                .andExpect(cursWithOutId("$[0]", cursTestDataFilteredDateAndCurrency.get(0)))
-                .andExpect(cursWithOutId("$[1]", cursTestDataFilteredDateAndCurrency.get(1)));
-
-
-        cursTestDataFilteredDateAndCurrency = testData.stream()
-                .filter(x -> x.getCurrencyType().equals(testCurrency))
-                .collect(Collectors.toList());
-        cursEntitiesFilteredDateAndCurrency = cursEntities.stream()
-                .filter(x -> x.getCurrencyType().equals(testCurrency))
-                .collect(Collectors.toList());
-        mvc.perform(
-                        org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get(getUrl())
-                                .contentType(MediaType.APPLICATION_JSON)
-                                .param("currency", testCurrency.toString())
-                )
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$", hasSize(cursTestDataFilteredDateAndCurrency.size())))
-                .andExpect(cursWithId("$[0]", cursEntitiesFilteredDateAndCurrency.get(0)))
-                .andExpect(cursWithId("$[1]", cursEntitiesFilteredDateAndCurrency.get(1)))
-                .andExpect(cursWithOutId("$[0]", cursTestDataFilteredDateAndCurrency.get(0)))
-                .andExpect(cursWithOutId("$[1]", cursTestDataFilteredDateAndCurrency.get(1)));
     }
 
     @Test
@@ -191,6 +212,8 @@ class CursControllerTest extends BasePostgresSQLContainer {
                 .date(LocalDate.now())
                 .build();
         String jsonData = jsonMapper.writeValueAsString(cursDto);
+
+
         mvc.perform(post(getUrl())
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON)
@@ -213,6 +236,8 @@ class CursControllerTest extends BasePostgresSQLContainer {
                 .date(LocalDate.now())
                 .build();
         String jsonData = jsonMapper.writeValueAsString(cursDto);
+
+
         mvc.perform(put(getUrl())
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON)
@@ -226,6 +251,8 @@ class CursControllerTest extends BasePostgresSQLContainer {
     void delete() throws Exception {
         long count = cursRepo.findAll().size();
         Curs curs = cursRepo.findAll().get(0);
+
+
         mvc.perform(
                         org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete(
                                         getUrl(String.valueOf(curs.getId()))
