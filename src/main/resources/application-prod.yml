@@ -1,0 +1,19 @@
+spring:
+  datasource:
+    url: jdbc:postgresql://localhost:5432/currency_db
+    username: postgres
+    password: postgres
+  flyway:
+    enabled: true
+    validate-on-migrate: true
+  mvc:
+    pathmatch:
+      matching-strategy: ant_path_matcher
+  jpa:
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+springdoc:
+  api-docs:
+    enabled: false
+  swagger-ui:
+    path: /swagger-ui.html
+    enabled: false

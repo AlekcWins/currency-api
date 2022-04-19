@@ -1,0 +1,22 @@
+[
+  {
+    "currencyType": "USD",
+    "cursValue": 50.54,
+    "date": "14.04.2022"
+  },
+  {
+    "currencyType": "EUR",
+    "cursValue": 60.77,
+    "date": "14.04.2022"
+  },
+  {
+    "currencyType": "RUB",
+    "cursValue": 77.66,
+    "date": "14.05.2022"
+  },
+  {
+    "currencyType": "USD",
+    "cursValue": 99.55,
+    "date": "14.05.2022"
+  }
+]
