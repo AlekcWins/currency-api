@@ -15,5 +15,8 @@ spring:
         show_sql: true
     database-platform: org.hibernate.dialect.PostgreSQLDialect
 springdoc:
+  api-docs:
+    enabled: true
   swagger-ui:
     path: /swagger-ui.html
+    enabled: true
