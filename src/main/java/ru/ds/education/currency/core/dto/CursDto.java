@@ -7,6 +7,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import ru.ds.education.currency.model.CurrencyType;
+import ru.ds.education.currency.spec.DateSpec;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -26,7 +27,7 @@ public class CursDto {
     @Schema(description = "Значение курса", example = "1.5")
     private BigDecimal cursValue;
 
-    @JsonFormat(pattern = "dd.MM.yyyy")
-    @Schema(pattern = "dd.MM.yyyy", description = "дата", example = "14.04.2022")
+    @JsonFormat(pattern = DateSpec.DATE_FORMAT)
+    @Schema(pattern = DateSpec.DATE_FORMAT, description = "дата", example = "14.04.2022")
     private LocalDate date;
 }

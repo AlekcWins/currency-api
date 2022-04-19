@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.*;
 import ru.ds.education.currency.core.dto.CursDto;
 import ru.ds.education.currency.model.CurrencyType;
 import ru.ds.education.currency.service.CursService;
+import ru.ds.education.currency.spec.DateSpec;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -57,7 +58,7 @@ public class CursController {
             summary = "Получение курсов, необязательлные параметры date - дата ,currency -  тип валюты"
     )
     @GetMapping
-    public List<CursDto> getAll(@RequestParam(required = false) @DateTimeFormat(pattern = "dd.MM.yyyy") LocalDate date,
+    public List<CursDto> getAll(@RequestParam(required = false) @DateTimeFormat(pattern = DateSpec.DATE_FORMAT) LocalDate date,
                                 @RequestParam(required = false) CurrencyType currency) {
 
         return cursService.findAllByCurrencyTypeAndDate(currency, date);
