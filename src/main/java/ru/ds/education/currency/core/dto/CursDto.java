@@ -6,7 +6,6 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import ru.ds.education.currency.model.CurrencyType;
 import ru.ds.education.currency.spec.DateSpec;
 
 import java.math.BigDecimal;
@@ -22,7 +21,7 @@ public class CursDto {
     private long id;
 
     @Schema(description = "Тип валюты", example = "USD")
-    private CurrencyType currencyType;
+    private String currencyType;
 
     @Schema(description = "Значение курса", example = "1.5")
     private BigDecimal cursValue;

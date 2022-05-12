@@ -1,21 +1,33 @@
 [
   {
-    "currencyType": "USD",
+    "currencyType": {
+      "id": 2,
+      "currencyType": "USD"
+    },
     "cursValue": 50.54,
     "date": "14.04.2022"
   },
   {
-    "currencyType": "EUR",
+    "currencyType": {
+      "id": 1,
+      "currencyType": "EUR"
+    },
     "cursValue": 60.77,
     "date": "14.04.2022"
   },
   {
-    "currencyType": "RUB",
+    "currencyType": {
+      "id": 3,
+      "currencyType": "RUB"
+    },
     "cursValue": 77.66,
     "date": "14.05.2022"
   },
   {
-    "currencyType": "USD",
+    "currencyType": {
+      "id": 2,
+      "currencyType": "USD"
+    },
     "cursValue": 99.55,
     "date": "14.05.2022"
   }

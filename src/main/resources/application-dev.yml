@@ -3,6 +3,10 @@ spring:
     url: jdbc:postgresql://localhost:5432/currency_db
     username: postgres
     password: postgres
+  activemq:
+    broker-url: tcp://localhost:61617
+    user: admin
+    password: admin
   flyway:
     enabled: true
     validate-on-migrate: true
@@ -20,3 +24,8 @@ springdoc:
   swagger-ui:
     path: /swagger-ui.html
     enabled: true
+jms:
+  request-queue: dev.cbr.request
+  response-queue: dev.cbr.response
+server:
+  port: 8081

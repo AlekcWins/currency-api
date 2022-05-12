@@ -12,6 +12,7 @@ public class CursMapper extends ConfigurableMapper {
     protected void configure(MapperFactory factory) {
         factory.classMap(Curs.class, CursDto.class)
                 .byDefault()
+                .field("currencyType.currencyType", "currencyType")
                 .register();
     }
 }
