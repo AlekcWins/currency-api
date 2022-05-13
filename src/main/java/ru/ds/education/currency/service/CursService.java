@@ -1,12 +1,14 @@
 package ru.ds.education.currency.service;
 
+import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import ru.ds.education.currency.core.dto.CursDto;
 import ru.ds.education.currency.core.dto.mapper.CursMapper;
 import ru.ds.education.currency.model.CurrencyType;
 import ru.ds.education.currency.model.Curs;
+import ru.ds.education.currency.repository.CurrencyTypesRepo;
 import ru.ds.education.currency.repository.CursRepo;
 
 import java.time.LocalDate;
@@ -17,15 +19,12 @@ import java.util.stream.Collectors;
 
 @Service
 @Slf4j
+@AllArgsConstructor
 public class CursService {
     private final CursMapper cursMapper;
     private final CursRepo cursRepo;
+    private final CurrencyTypesRepo currencyTypesRepo;
 
-    @Autowired
-    public CursService(CursMapper cursMapper, CursRepo cursRepo) {
-        this.cursMapper = cursMapper;
-        this.cursRepo = cursRepo;
-    }
 
     public Optional<CursDto> get(long id) {
         Optional<Curs> foundCurs = cursRepo.findById(id);
@@ -38,22 +37,32 @@ public class CursService {
                 .collect(Collectors.toList());
     }
 
-    public CursDto create(CursDto curs) {
+    public Optional<CursDto> create(CursDto curs) {
         Curs newCurs = cursMapper.map(curs, Curs.class);
-        newCurs = cursRepo.save(newCurs);
-        curs = cursMapper.map(newCurs, CursDto.class);
-        return curs;
+        Optional<CurrencyType> findCurrencyType = currencyTypesRepo.findAllByCurrencyType(curs.getCurrencyType());
+        if (findCurrencyType.isPresent()) {
+            newCurs.setCurrencyType(findCurrencyType.get());
+            newCurs = cursRepo.save(newCurs);
+            curs = cursMapper.map(newCurs, CursDto.class);
+            return Optional.of(curs);
+        }
+        return Optional.empty();
     }
 
-    public CursDto update(CursDto curs) {
+    public Optional<CursDto> update(CursDto curs) {
         Curs currentCurs = cursMapper.map(curs, Curs.class);
-        long cursId = currentCurs.getId();
-        Curs findCurs = cursRepo.findById(cursId)
-                .orElseThrow(() -> new NoSuchElementException("not found curs with id " + cursId));
-        currentCurs.setId(findCurs.getId());
-        Curs newCurs = cursRepo.save(currentCurs);
-        curs = cursMapper.map(newCurs, CursDto.class);
-        return curs;
+        Optional<CurrencyType> findCurrencyType = currencyTypesRepo.findAllByCurrencyType(curs.getCurrencyType());
+        if (findCurrencyType.isPresent()) {
+            long cursId = currentCurs.getId();
+            currentCurs.setCurrencyType(findCurrencyType.get());
+            Curs findCurs = cursRepo.findById(cursId)
+                    .orElseThrow(() -> new NoSuchElementException("not found curs with id " + cursId));
+            currentCurs.setId(findCurs.getId());
+            Curs newCurs = cursRepo.save(currentCurs);
+            curs = cursMapper.map(newCurs, CursDto.class);
+            return Optional.of(curs);
+        }
+        return Optional.empty();
     }
 
     public void delete(long idCurs) {
@@ -62,7 +71,7 @@ public class CursService {
 
     }
 
-    public List<CursDto> findAllByCurrencyType(CurrencyType currencyType) {
+    public List<CursDto> findAllByCurrencyType(String currencyType) {
         return cursRepo.findAllByCurrencyType(currencyType)
                 .stream()
                 .map(c -> cursMapper.map(c, CursDto.class))
@@ -70,7 +79,7 @@ public class CursService {
 
     }
 
-    public List<CursDto> findAllByCurrencyTypeAndDate(CurrencyType currencyType, LocalDate date) {
+    public List<CursDto> findAllByCurrencyTypeAndDate(String currencyType, LocalDate date) {
         return cursRepo.findAllByCurrencyTypeAndDate(currencyType, date)
                 .stream()
                 .map(c -> cursMapper.map(c, CursDto.class))
@@ -83,5 +92,10 @@ public class CursService {
                 .stream()
                 .map(c -> cursMapper.map(c, CursDto.class))
                 .collect(Collectors.toList());
+    }
+
+    @Transactional
+    public void deleteCursByDate(LocalDate onDate) {
+        cursRepo.deleteCursByDate(onDate);
     }
 }

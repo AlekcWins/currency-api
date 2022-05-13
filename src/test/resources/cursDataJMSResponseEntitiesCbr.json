@@ -1,0 +1,17 @@
+{
+  "onDate": "2026-02-01",
+  "rates": [
+    {
+      "currency": "EUR",
+      "curs": 22.44
+    },
+    {
+      "currency": "TEST",
+      "curs": 77.66
+    },
+    {
+      "currency": "USD",
+      "curs": 11.28
+    }
+  ]
+}

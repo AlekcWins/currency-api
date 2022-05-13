@@ -1,8 +1,8 @@
 plugins {
-	id 'org.springframework.boot' version '2.6.6'
-	id 'io.spring.dependency-management' version '1.0.11.RELEASE'
-	id 'java'
-	id "org.flywaydb.flyway" version "8.5.7"
+    id 'org.springframework.boot' version '2.6.6'
+    id 'io.spring.dependency-management' version '1.0.11.RELEASE'
+    id 'java'
+    id "org.flywaydb.flyway" version "8.5.7"
 }
 
 group = 'ru.ds.education'
@@ -10,33 +10,42 @@ version = '0.0.1-SNAPSHOT'
 sourceCompatibility = '11'
 
 configurations {
-	compileOnly {
-		extendsFrom annotationProcessor
-	}
+    compileOnly {
+        extendsFrom annotationProcessor
+    }
 }
 
 repositories {
-	mavenCentral()
+    mavenCentral()
 }
 
 dependencies {
-	implementation 'org.springframework.boot:spring-boot-starter-web:2.6.6'
-	implementation 'org.flywaydb:flyway-core:8.0.5'
-	implementation 'org.springframework.boot:spring-boot-starter-data-jpa:2.6.6'
-	implementation 'ma.glasnost.orika:orika-core:1.5.4'
-	implementation 'org.springdoc:springdoc-openapi-ui:1.6.7'
-	implementation 'com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.13.2'
-	compileOnly 'org.projectlombok:lombok:1.18.22'
-	runtimeOnly 'org.postgresql:postgresql:42.3.3'
-	developmentOnly 'org.springframework.boot:spring-boot-devtools:2.6.6'
-	annotationProcessor 'org.projectlombok:lombok:1.18.22'
-	testImplementation 'org.springframework.boot:spring-boot-starter-test:2.6.6'
-	testImplementation 'org.testcontainers:postgresql:1.17.1'
+    implementation 'org.springframework.boot:spring-boot-starter-web:2.6.6'
+    implementation 'org.flywaydb:flyway-core:8.0.5'
+    implementation 'org.springframework.boot:spring-boot-starter-data-jpa:2.6.6'
+    implementation 'ma.glasnost.orika:orika-core:1.5.4'
+    implementation 'org.springdoc:springdoc-openapi-ui:1.6.7'
+    implementation 'com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.13.2'
+    implementation 'org.springframework.boot:spring-boot-starter-activemq:2.6.6'
+    implementation('org.springframework.boot:spring-boot-starter-validation:2.6.6')
+    implementation 'org.projectlombok:lombok:1.18.22'
+    compileOnly 'org.projectlombok:lombok:1.18.22'
+    runtimeOnly 'org.postgresql:postgresql:42.3.3'
+    developmentOnly 'org.springframework.boot:spring-boot-devtools:2.6.6'
+    annotationProcessor 'org.projectlombok:lombok:1.18.22'
+    testImplementation 'org.apache.activemq:activemq-broker:5.17.0'
+    testImplementation 'org.springframework.boot:spring-boot-starter-test:2.6.6'
+    testImplementation 'org.testcontainers:postgresql:1.17.1'
+    annotationProcessor 'org.projectlombok:lombok:1.18.22'
+    testAnnotationProcessor "org.projectlombok:lombok:1.18.22"
 
+    implementation "javax.xml.ws:jaxws-api:2.3.1"
+    implementation 'com.sun.xml.ws:jaxws-ri:2.3.2'
+    implementation 'org.springframework.ws:spring-ws-core:3.1.2'
 
 }
 
 
 tasks.named('test') {
-	useJUnitPlatform()
+    useJUnitPlatform()
 }

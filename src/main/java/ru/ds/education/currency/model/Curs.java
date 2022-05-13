@@ -16,8 +16,8 @@ public class Curs {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
-    @Column(name = "currency")
-    @Enumerated(EnumType.STRING)
+    @OneToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "currency_type_id", referencedColumnName = "id")
     private CurrencyType currencyType;
 
     @Column(name = "curs")
