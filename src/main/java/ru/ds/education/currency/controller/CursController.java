@@ -124,8 +124,7 @@ public class CursController {
                     content = @Content)})
     @PutMapping
     public ResponseEntity<CursDto> update(@RequestBody CursDto curs) {
-        Optional<CursDto> updatedCurs = cursService.update(curs);
-        return updatedCurs
+        return cursService.update(curs)
                 .map(cursDto -> new ResponseEntity<>(cursDto, HttpStatus.OK))
                 .orElseGet(() -> new ResponseEntity<>(HttpStatus.BAD_REQUEST));
 
