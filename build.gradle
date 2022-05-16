@@ -28,6 +28,8 @@ dependencies {
     implementation 'com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.13.2'
     implementation 'org.springframework.boot:spring-boot-starter-activemq:2.6.6'
     implementation('org.springframework.boot:spring-boot-starter-validation:2.6.6')
+    implementation 'org.springframework.boot:spring-boot-starter-security'
+    implementation 'org.springframework.security:spring-security-test'
     implementation 'org.projectlombok:lombok:1.18.22'
     compileOnly 'org.projectlombok:lombok:1.18.22'
     runtimeOnly 'org.postgresql:postgresql:42.3.3'
@@ -38,6 +40,7 @@ dependencies {
     testImplementation 'org.testcontainers:postgresql:1.17.1'
     annotationProcessor 'org.projectlombok:lombok:1.18.22'
     testAnnotationProcessor "org.projectlombok:lombok:1.18.22"
+
 
     implementation "javax.xml.ws:jaxws-api:2.3.1"
     implementation 'com.sun.xml.ws:jaxws-ri:2.3.2'

@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultMatcher;
@@ -80,6 +81,7 @@ class CursControllerTest extends BaseActiveMQContainer {
     }
 
     @Test
+    @WithMockUser
     void getWithIdAndOkStatus() throws Exception {
         Curs curs = cursRepo.findAll().get(0);
         CursDto cursDto = cursMapper.map(curs, CursDto.class);
@@ -93,6 +95,7 @@ class CursControllerTest extends BaseActiveMQContainer {
     }
 
     @Test
+    @WithMockUser
     void getWithIdAndBadStatus() throws Exception {
         long count = cursRepo.count();
 
@@ -103,6 +106,7 @@ class CursControllerTest extends BaseActiveMQContainer {
     }
 
     @Test
+    @WithMockUser
     void getAll() throws Exception {
         List<CursDto> testData = convertTestData(loadTestData());
         long count = cursRepo.count();
@@ -126,6 +130,7 @@ class CursControllerTest extends BaseActiveMQContainer {
     }
 
     @Test
+    @WithMockUser
     void getAllWithDateParameterWhenHaveDataInCursDatabase() throws Exception {
         List<CursDto> testData = convertTestData(loadTestData());
         LocalDate testDate = LocalDate.of(2022, 5, 14);
@@ -150,6 +155,7 @@ class CursControllerTest extends BaseActiveMQContainer {
     }
 
     @Test
+    @WithMockUser
     void getAllWithDateParameterWhenHaveNotDataInCursDatabase() throws Exception {
         CursDataJMSResponse testDataCursJMS = CursJsonReader.readTestDataCursJMS();
         LocalDate testDate = LocalDate.of(2026, 2, 1);
@@ -188,6 +194,7 @@ class CursControllerTest extends BaseActiveMQContainer {
     }
 
     @Test
+    @WithMockUser
     void getAllWithDateParameterWhenHaveNotDataInCursDatabaseFailedRequest() throws Exception {
         LocalDate testDate = LocalDate.of(2030, 2, 1);
 
@@ -215,6 +222,7 @@ class CursControllerTest extends BaseActiveMQContainer {
     }
 
     @Test
+    @WithMockUser
     void getAllWithCurrencyParameter() throws Exception {
         List<CursDto> testData = convertTestData(loadTestData());
 
@@ -244,6 +252,7 @@ class CursControllerTest extends BaseActiveMQContainer {
     }
 
     @Test
+    @WithMockUser
     void getAllWithDateAndCurrencyParameters() throws Exception {
         List<CursDto> testData = convertTestData(loadTestData());
         List<CursDto> cursEntities = cursRepo.findAll().stream()
@@ -273,6 +282,7 @@ class CursControllerTest extends BaseActiveMQContainer {
     }
 
     @Test
+    @WithMockUser
     void create() throws Exception {
         long count = cursRepo.findAll().size();
         long lastId = cursRepo.findAll().stream()
@@ -299,6 +309,7 @@ class CursControllerTest extends BaseActiveMQContainer {
     }
 
     @Test
+    @WithMockUser
     void createBadRequest() throws Exception {
         long count = cursRepo.findAll().size();
         CursDto cursDto = CursDto.builder()
@@ -321,6 +332,7 @@ class CursControllerTest extends BaseActiveMQContainer {
     }
 
     @Test
+    @WithMockUser
     void update() throws Exception {
         long count = cursRepo.findAll().size();
         long lastId = cursRepo.findAll().stream().mapToLong(Curs::getId).max().orElseThrow(NoSuchElementException::new);
@@ -344,6 +356,7 @@ class CursControllerTest extends BaseActiveMQContainer {
     }
 
     @Test
+    @WithMockUser
     void updateBadRequest() throws Exception {
         long count = cursRepo.findAll().size();
         CursDto cursDto = CursDto.builder()
@@ -364,6 +377,7 @@ class CursControllerTest extends BaseActiveMQContainer {
     }
 
     @Test
+    @WithMockUser
     void delete() throws Exception {
         long count = cursRepo.findAll().size();
         Curs curs = cursRepo.findAll().get(0);
