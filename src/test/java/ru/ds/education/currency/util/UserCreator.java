@@ -1,4 +1,4 @@
-package ru.ds.education.currency.service;
+package ru.ds.education.currency.util;
 
 import lombok.AllArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -11,11 +11,11 @@ import java.util.Collections;
 
 @Service
 @AllArgsConstructor
-public class UserService {
+public class UserCreator {
     private final PasswordEncoder passwordEncoder;
     private UserRepo userRepository;
 
-    public void createIfNotExist(String username, String password) {
+    private void createIfNotExist(String username, String password) {
         if (!userRepository.existsByUsername(username)) {
             User user = new User();
             user.setRoles(Collections.singleton(Role.USER));
@@ -23,5 +23,9 @@ public class UserService {
             user.setUsername(username);
             userRepository.save(user);
         }
+    }
+
+    public void createUserForTest() {
+        createIfNotExist("admin", "admin_pass");
     }
 }

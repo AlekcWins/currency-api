@@ -29,7 +29,3 @@ jms:
   response-queue: dev.cbr.response
 server:
   port: 8081
-
-auth:
-  user : admin
-  password : admin_pass
