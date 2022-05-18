@@ -10,7 +10,7 @@ import ru.ds.education.currency.service.CursService;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @SpringBootTest
-class CurrencyApiApplicationTests {
+class CurrencyApiApplicationTests  extends BaseActiveMQContainer {
 
     @Autowired
     private CursController cursController;

@@ -7,6 +7,7 @@ import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -40,7 +41,8 @@ public class CursController {
 
 
     @Operation(
-            summary = "Получение курса по Id"
+            summary = "Получение курса по Id",
+            security = @SecurityRequirement(name = "basicAuth")
     )
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "курс получен",
@@ -58,7 +60,8 @@ public class CursController {
 
 
     @Operation(
-            summary = "Получение курсов, необязательлные параметры date - дата ,currency -  тип валюты"
+            summary = "Получение курсов, необязательлные параметры date - дата ,currency -  тип валюты",
+            security = @SecurityRequirement(name = "basicAuth")
     )
     @ApiResponse(responseCode = "200", description = "проверяется, есть запись в таблице curs_data. Если есть, то возвращается ответ",
             content = {@Content(mediaType = "application/json",
@@ -97,7 +100,8 @@ public class CursController {
     }
 
     @Operation(
-            summary = "Добавление курса"
+            summary = "Добавление курса",
+            security = @SecurityRequirement(name = "basicAuth")
     )
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "курс создан",
@@ -114,7 +118,8 @@ public class CursController {
     }
 
     @Operation(
-            summary = "Обновление курса"
+            summary = "Обновление курса",
+            security = @SecurityRequirement(name = "basicAuth")
     )
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "курс обновлен",
@@ -131,7 +136,8 @@ public class CursController {
     }
 
     @Operation(
-            summary = "Удаление курса"
+            summary = "Удаление курса",
+            security = @SecurityRequirement(name = "basicAuth")
     )
     @DeleteMapping("/{cursId}")
     public void delete(@PathVariable long cursId) {
