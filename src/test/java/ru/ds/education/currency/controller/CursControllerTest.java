@@ -3,8 +3,10 @@ package ru.ds.education.currency.controller;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.Assert;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestInstance;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -14,7 +16,7 @@ import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultMatcher;
-import ru.ds.education.currency.BaseActiveMQContainer;
+import ru.ds.education.currency.containers.BaseActiveMQContainer;
 import ru.ds.education.currency.core.dto.CursDataJMSResponse;
 import ru.ds.education.currency.core.dto.CursDto;
 import ru.ds.education.currency.core.dto.mapper.CursMapper;
@@ -26,6 +28,7 @@ import ru.ds.education.currency.repository.CursRepo;
 import ru.ds.education.currency.repository.CursRequestRepo;
 import ru.ds.education.currency.spec.DateSpec;
 import ru.ds.education.currency.util.CursJsonReader;
+import ru.ds.education.currency.util.UserCreator;
 
 import javax.annotation.PostConstruct;
 import java.math.BigDecimal;
@@ -46,6 +49,7 @@ import static ru.ds.education.currency.util.CursJsonReader.getJsonMapperForCursD
 @SpringBootTest()
 @AutoConfigureMockMvc
 @RunWith(SpringRunner.class)
+@TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class CursControllerTest extends BaseActiveMQContainer {
 
     @Autowired
@@ -53,6 +57,9 @@ class CursControllerTest extends BaseActiveMQContainer {
 
     @Autowired
     private CursRepo cursRepo;
+
+    @Autowired
+    private UserCreator userCreator;
 
     @Autowired
     private CursRequestRepo cursRequestRepo;
@@ -71,6 +78,11 @@ class CursControllerTest extends BaseActiveMQContainer {
         jsonMapper = getJsonMapperForCursData();
     }
 
+
+    @BeforeAll
+    void createUser() {
+        userCreator.createUserForTest();
+    }
 
     @BeforeEach
     public void createDbData() throws Exception {
