@@ -1,14 +1,14 @@
 spring:
   datasource:
-    url: jdbc:postgresql://localhost:5432/currency_db
-    username: postgres
-    password: postgres
+    url: jdbc:postgresql://${DB_HOST}:${DB_PORT}/${DB_NAME}
+    username: ${POSTGRES_USER}
+    password: ${POSTGRES_PASSWORD}
   activemq:
-    broker-url: tcp://localhost:61617
-    user: admin
-    password: admin
+    broker-url: tcp://${ACTIVE_MQ_HOST}:${ACTIVE_MQ_PORT}
+    user: ${ACTIVE_MQ_USER}
+    password: ${ACTIVE_MQ_PASSWORD}
   flyway:
-    enabled: true
+    enabled: false
     validate-on-migrate: true
   mvc:
     pathmatch:
